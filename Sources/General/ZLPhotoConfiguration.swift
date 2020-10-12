@@ -110,7 +110,7 @@ public class ZLPhotoConfiguration: NSObject {
     @objc public var allowDragSelect = false
     
     /// 是否允许选择原图
-    @objc public var allowSelectOriginal = true
+    @objc public var allowSelectOriginal = false
     
     /// 是否允许预览已选择的照片 (小图界面预览按钮)
     @objc public var allowPreviewSelectedPhotos = true
