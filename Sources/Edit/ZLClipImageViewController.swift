@@ -79,6 +79,8 @@ class ZLClipImageViewController: UIViewController {
     
     var overlayView: ZLClipOverlayView!
     
+    var roundedOverlayLayer = CAShapeLayer()
+    
     var gridPanGes: UIPanGestureRecognizer!
     
     var bottomToolView: UIView!
@@ -111,7 +113,11 @@ class ZLClipImageViewController: UIViewController {
     
     var angle: CGFloat = 0
     
-    var selectedRatio: ZLImageClipRatio
+    var selectedRatio: ZLImageClipRatio {
+        willSet {
+            roundedOverlayLayer.isHidden = !newValue.isRounded
+        }
+    }
     
     var thumbnailImage: UIImage?
     
@@ -173,6 +179,7 @@ class ZLClipImageViewController: UIViewController {
             firstEnter = true
             self.selectedRatio = ZLPhotoConfiguration.default().editImageClipRatios.first!
         }
+        roundedOverlayLayer.isHidden = !self.selectedRatio.isRounded
         super.init(nibName: nil, bundle: nil)
         if firstEnter {
             self.calculateClipRect()
@@ -284,6 +291,9 @@ class ZLClipImageViewController: UIViewController {
         self.overlayView = ZLClipOverlayView()
         self.overlayView.isUserInteractionEnabled = false
         self.view.addSubview(self.overlayView)
+        overlayView.layer.addSublayer(roundedOverlayLayer)
+        roundedOverlayLayer.fillRule = .evenOdd
+        roundedOverlayLayer.fillColor = UIColor.black.withAlphaComponent(0.7).cgColor
         
         self.bottomToolView = UIView()
         self.view.addSubview(self.bottomToolView)
@@ -480,6 +490,10 @@ class ZLClipImageViewController: UIViewController {
 //        self.scrollView.contentSize = size
         
         self.scrollView.zoomScale = self.scrollView.zoomScale
+        
+        let path = CGMutablePath(rect: overlayView.bounds, transform: nil)
+        path.addPath(UIBezierPath(ovalIn: overlayView.bounds).cgPath)
+        roundedOverlayLayer.path = path
     }
     
     @objc func cancelBtnClick() {

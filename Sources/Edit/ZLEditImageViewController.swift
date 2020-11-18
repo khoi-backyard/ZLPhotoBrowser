@@ -981,9 +981,18 @@ public class ZLImageClipRatio: NSObject {
     
     let whRatio: CGFloat
     
+    let isRounded: Bool
+    
     @objc public init(title: String, whRatio: CGFloat) {
         self.title = title
         self.whRatio = whRatio
+        self.isRounded = false
+    }
+    
+    @objc public init(title: String, whRatio: CGFloat, isRounded: Bool) {
+        self.title = title
+        self.whRatio = whRatio
+        self.isRounded = isRounded
     }
     
 }
